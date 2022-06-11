@@ -16,27 +16,34 @@ import time
 
 '> :bulb: **Tip:** Remember to appreciate the little things in life.'
 
+st.warning('> :warning: **Warning:** Do not push the big red button.')
+
+st.info('> :memo: **Note:** Sunrises are beautiful.')
+
+st.error('> :bulb: **Tip:** Remember to appreciate the little things in life.')
+
+
 temp_data = pd.read_csv("h:\projects\humidity_temp.csv", names=['datetime', 'humidity', 'temperature'])
 temp_data['datetime'] = pd.to_datetime(temp_data['datetime'])
 temp_data.set_index(temp_data['datetime'], inplace=True)
 
-st.write('Temperature data table:')
+st.header('Temperature data table:')
 st.dataframe(temp_data[['temperature', 'humidity']])
 
-st.write('Temperature chart:')
+st.header('Temperature chart:')
 
 st.line_chart(temp_data[['temperature', 'humidity']].tail(1500))
 
-st.write('Dummy chart:')
+st.header('Dummy chart:')
 chart_data = pd.DataFrame(
      np.random.randn(20, 3),
      columns=['a', 'b', 'c'])
 
 st.line_chart(chart_data)
 
-st.write('Dummy map:')
+st.header('Dummy map:')
 map_data = pd.DataFrame(
-    np.random.randn(1000, 2) / [10, 10] + [52.4, 21.0],
+    np.random.randn(1000, 2) / [5, 10] + [52.4, 21.0],
     columns=['lat', 'lon'])
 
 st.map(map_data)
@@ -74,6 +81,9 @@ add_selectbox = st.sidebar.selectbox(
     'How would you like to be contacted?',
     ('Email', 'Home phone', 'Mobile phone')
 )
+
+st.header('JSON:')
+st.json(df.to_json())
 
 # Add a slider to the sidebar:
 add_slider = st.sidebar.slider(
