@@ -5,6 +5,7 @@ Snowflake tutorial :)
 
 import numpy as np
 import pandas as pd
+import requests
 import streamlit as st
 
 
@@ -28,3 +29,12 @@ fruits_to_show = my_fruit_list.loc[fruits_selected]
 # display the dataframe
 st.dataframe(fruits_to_show)
 
+st.header('Fruityvice Fruit Advice!')
+fruit_choice = st.text_input('What fruit do you want to know about?', 'Kiwi')
+st.write('You selected:', fruit_choice)
+
+fruityvice_response = requests.get(f"https://fruityvice.com/api/fruit/{fruit_choice}")
+# st.text(fruityvice_response.json())
+
+fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
+st.dataframe(fruityvice_normalized)
