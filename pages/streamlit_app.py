@@ -47,3 +47,8 @@ my_cur.execute("SELECT * FROM fruit_load_list")
 my_data_row = my_cur.fetchall()
 st.header("The fruit load list contains:")
 st.dataframe(my_data_row)
+
+# Allow the user to select a fruit from the list
+add_my_fruit = st.text_input('What fruit do you want to add to the list?', 'jackfruit')
+my_cur.execute(f"INSERT '{add_my_fruit}' INTO fruit_load_list")
+st.text(f"Thanks for adding {add_my_fruit} to the list!")
