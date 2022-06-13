@@ -6,7 +6,7 @@ Snowflake tutorial :)
 import numpy as np
 import pandas as pd
 import requests
-import snowflake-connector-python as sfp
+import snowflake.connector
 import streamlit as st
 
 
