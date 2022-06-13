@@ -64,7 +64,7 @@ def get_fruit_load_list():
 if st.button('Load the fruit list'):
     my_cnx = snowflake.connector.connect(**st.secrets["snowflake"])
     my_data_rows = get_fruit_load_list()
-    st.dataframe(my_data_row)
+    st.dataframe(my_data_rows)
 
 # Allow the user to select a fruit from the list
 add_my_fruit = st.text_input('What fruit do you want to add to the list?', 'jackfruit')
