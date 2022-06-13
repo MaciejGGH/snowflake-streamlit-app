@@ -32,14 +32,20 @@ fruits_to_show = my_fruit_list.loc[fruits_selected]
 st.dataframe(fruits_to_show)
 
 st.header('Fruityvice Fruit Advice!')
+
+def get_fruityvice_data(this_fruit_choice):
+    fruityvice_response = requests.get(f"https://fruityvice.com/api/fruit/{fruit_choice}")
+    fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
+    return fruityvice_normalized
+
+
 try:
     fruit_choice = st.text_input('What fruit do you want to know about?')
     if not fruit_choice:
         st.error('Please select a fruit to get information about!')
     else:
-        fruityvice_response = requests.get(f"https://fruityvice.com/api/fruit/{fruit_choice}")
-        fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
-        st.dataframe(fruityvice_normalized)
+        back_from_function = get_fruityvice_data(fruit_choice)
+        st.dataframe(back_from_function)
 except URLError as e:
     st.error(e)
 
@@ -47,15 +53,18 @@ st.write('You selected:', fruit_choice)
 
 # st.text(fruityvice_response.json())
 
-
-st.stop()
-
-my_cnx = snowflake.connector.connect(**st.secrets["snowflake"])
-my_cur = my_cnx.cursor()
-my_cur.execute("SELECT * FROM fruit_load_list")
-my_data_row = my_cur.fetchall()
 st.header("The fruit load list contains:")
-st.dataframe(my_data_row)
+# Snowflake-related functions
+def get_fruit_load_list():
+    with my_cnx.cursor() as my_cur:
+        my_cur.execute("SELECT * FROM fruit_load_list")
+        return my_cur.fetchall()
+
+# Add button to load the fruit
+if st.button('Load the fruit list'):
+    my_cnx = snowflake.connector.connect(**st.secrets["snowflake"])
+    my_data_rows = get_fruit_load_list()
+    st.dataframe(my_data_row)
 
 # Allow the user to select a fruit from the list
 add_my_fruit = st.text_input('What fruit do you want to add to the list?', 'jackfruit')
